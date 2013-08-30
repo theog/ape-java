@@ -1,0 +1,143 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.theo.aftokinito</groupId>
+  <artifactId>aftokinito</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0</version>
+  <name>aftokinito</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.cove.ape</groupId>
+      <artifactId>ape</artifactId>
+      <version>0.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-cli</groupId>
+      <artifactId>commons-cli</artifactId>
+      <version>1.0</version>
+    </dependency>    
+  </dependencies>
+    <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <!--
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+		  <archive>
+            <manifest>
+              <mainClass>org.theo.aftokinito.carDemo</mainClass>
+              <addClasspath>true</addClasspath>
+            </manifest>
+          </archive>          
+        </configuration>
+      </plugin>
+      -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>webstart-maven-plugin</artifactId>
+        <executions>
+           <execution>
+              <goals>
+                 <goal>jnlp</goal> <!-- use jnlp, jnlp-inline or jnlp-single as appropriate -->
+              </goals>
+           </execution>
+        </executions>
+        <configuration>
+           <!--outputDirectory></outputDirectory--> <!-- not required?? -->
+
+           <!-- The path where the libraries are stored within the jnlp structure. not required. by default the libraries are within the working directory -->
+           <libPath>lib</libPath>
+
+           <!-- [optional] transitive dependencies filter - if omitted, all transitive dependencies are included -->
+           <dependencies>
+             <!-- Note that only groupId and artifactId must be specified here. because of a limitation of the Include/ExcludesArtifactFilter -->
+             <includes>
+                <include>commons-logging:commons-logging</include>
+                <include>commons-cli:commons-cli</include>
+             </includes>
+             <!-- excludes>
+                <exclude></exclude>
+             <excludes-->
+           </dependencies>
+
+           <!-- JNLP generation -->
+           <jnlp>
+             <!-- default values -->
+             <resources>${project.basedir}/src/main/resources</resources>
+             <!--inputTemplateResourcePath>${project.basedir}</inputTemplateResourcePath-->
+             <!--inputTemplate>src/main/jnlp/template.vm</inputTemplate--> <!-- relative to inputTemplateResourcePath -->
+             <outputFile>app.jnlp</outputFile> <!-- defaults to launch.jnlp -->
+
+             <!-- used to automatically identify the jar containing the main class. -->
+             <!-- this is perhaps going to change -->
+             <mainClass>org.apache.commons.cli.BasicParser</mainClass>
+           </jnlp>
+
+
+           <!-- SIGNING -->
+           <!-- defining this will automatically sign the jar and its dependencies, if necessary -->
+           <sign>
+             <keystore></keystore>
+             <keypass></keypass>  <!-- we need to override passwords easily from the command line. ${keypass} -->
+             <storepass></storepass> <!-- ${storepass} -->
+             <storetype></storetype>
+             <alias></alias>
+             <validity></validity>
+
+             <dnameCn></dnameCn>
+             <dnameOu></dnameOu>
+             <dnameO></dnameO>
+             <dnameL></dnameL>
+             <dnameSt></dnameSt>
+             <dnameC></dnameC>
+
+             <verify>true</verify>
+
+             <!-- KEYSTORE MANGEMENT -->
+           </sign>
+
+           <!-- BUILDING PROCESS -->
+           <!--usejnlpservlet>true</usejnlpservlet--> <!-- not yet supported -->
+
+           <!-- should we have some more configurations here? E.g. compression level (aka packing effort) -->
+           <!-- not yet implemented -->
+           <pack200>true</pack200>
+           <gzip>true</gzip> <!-- default force when pack200 false, true when pack200 selected ?? -->
+           <!-- causes a version attribute to be output in each jar resource element, optional, default is false -->
+           <outputJarVersions>true</outputJarVersions>
+
+           <!-- misc -->
+           <!-- if there are multiple apps, do we need to mark one as default? (app/ redirects to app/default.jnlp in jnlp servlet ??)-->
+           <!-- -->
+
+           <!--install>false</install--> <!-- not yet supported -->
+           <verbose>true</verbose>
+
+        </configuration>
+      </plugin>
+
+    </plugins>
+    </build>
+</project>
